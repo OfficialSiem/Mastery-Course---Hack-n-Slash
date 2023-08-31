@@ -17,6 +17,11 @@ public class UiCharacterSelectionMarker : MonoBehaviour
     [SerializeField]
     private float howManySecondsToWaitForInitalization = 0.5f;
 
+    [SerializeField]
+    private float horzizontalThresholdForMovingCharacterSelectionMarker = 0.5f;
+
+    [SerializeField]
+    private float verticalThresholdForMovingCharacterSelectionMarker = 0.5f;
 
     private UiCharacterSelectionMenu menu;
     private bool initalizing;
@@ -44,12 +49,26 @@ public class UiCharacterSelectionMarker : MonoBehaviour
             return;
 
         // Check for playter controls and selection + locking character
+        if (player.Controller.horizontal > horzizontalThresholdForMovingCharacterSelectionMarker)
+        {
+            MoveToCharacterPanel(menu.RightPanel);
+        }
+        if (player.Controller.horizontal < -horzizontalThresholdForMovingCharacterSelectionMarker)
+        {
+            MoveToCharacterPanel(menu.LeftPanel);
+        }
+    }
 
+    private void MoveToCharacterPanel(UICharacterSelectionPanel panel)
+    {
+        transform.position = panel.transform.position;
     }
 
     private IEnumerator Initalize()
     {
         initalizing = true;
+
+        MoveToCharacterPanel(menu.LeftPanel);
 
         //so we can prevent registering and double button presses or shinanginens,
         // we can wait for a few moments after initalizing starts

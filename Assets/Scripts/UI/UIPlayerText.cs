@@ -14,9 +14,9 @@ public class UIPlayerText : MonoBehaviour
         tmText = GetComponent<TextMeshProUGUI>();
     }
 
-    internal void HandlePlayerInitalized()
+    internal void HandlePlayerInitalized(int playerNumber)
     {
-        tmText.text = "Player Joined";
+        tmText.text = $"Player {playerNumber} Joined";
 
         StartCoroutine(ClearTextAfterDelay(howManySecondsToWait));
     }

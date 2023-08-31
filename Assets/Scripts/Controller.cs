@@ -12,8 +12,13 @@ public class Controller : MonoBehaviour
     public bool IsAssigned { get; set; }
 
     private string attackButton;
+    private string horizontalAxis;
+    private string verticalAxis;
 
     public bool attack;
+    public bool attackPressed;
+    public float horizontal;
+    public float vertical;
 
     private void Start()
     {
@@ -25,13 +30,22 @@ public class Controller : MonoBehaviour
 
     private void Update()
     {
+        //attack putton pressed
         attack = Input.GetButton(attackButton);
+
+        //was attack pressed down on that frame
+        attackPressed = Input.GetButtonDown(attackButton);
+
+        horizontal = Input.GetAxis(horizontalAxis);
+        vertical = Input.GetAxis(verticalAxis);
     }
 
     internal void SetIndex(int index)
     {
         Index = index;
         attackButton = "Attack" + Index;
+        horizontalAxis = "Horizontal" + Index;
+        verticalAxis = "Vertical" + Index;
         gameObject.name = "Controller" + Index;
     }
 

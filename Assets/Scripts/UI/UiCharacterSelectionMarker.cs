@@ -27,6 +27,11 @@ public class UiCharacterSelectionMarker : MonoBehaviour
     private bool initalizing;
     private bool initialized;
 
+    public bool IsLockedIn { get; private set; }
+
+    //Meaning if a player is using a controller 
+    public bool IsPlayerIn { get { return player.HasController; } }
+
     private void Awake()
     {
         //Grab the menu if it exists
@@ -39,7 +44,7 @@ public class UiCharacterSelectionMarker : MonoBehaviour
 
     private void Update()
     {
-        if (player.HasController == false)
+        if (IsPlayerIn == false)
             return;
 
         if (!initalizing)
@@ -48,15 +53,29 @@ public class UiCharacterSelectionMarker : MonoBehaviour
         if (!initialized)
             return;
 
-        // Check for playter controls and selection + locking character
-        if (player.Controller.horizontal > horzizontalThresholdForMovingCharacterSelectionMarker)
+        //if the player hadn't locked in a character & Check for playter controls and selection
+        if (!IsLockedIn)
         {
-            MoveToCharacterPanel(menu.RightPanel);
+            if (player.Controller.horizontal > horzizontalThresholdForMovingCharacterSelectionMarker)
+            {
+                MoveToCharacterPanel(menu.RightPanel);
+            }
+            if (player.Controller.horizontal < -horzizontalThresholdForMovingCharacterSelectionMarker)
+            {
+                MoveToCharacterPanel(menu.LeftPanel);
+            }
+            if (player.Controller.attackPressed)
+            {
+                LockCharacter();
+            }
         }
-        if (player.Controller.horizontal < -horzizontalThresholdForMovingCharacterSelectionMarker)
-        {
-            MoveToCharacterPanel(menu.LeftPanel);
-        }
+    }
+
+    private void LockCharacter()
+    {
+        IsLockedIn = true;
+        lockImage.gameObject.SetActive(true);
+        markerImage.gameObject.SetActive(false);
     }
 
     private void MoveToCharacterPanel(UICharacterSelectionPanel panel)
